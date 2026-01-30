@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use App\Traits\HasCreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class Application extends Model
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, HasCreatedUpdatedBy;
 
     protected $fillable = [
         'name',
