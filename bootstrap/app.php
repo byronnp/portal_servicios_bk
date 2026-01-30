@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('/api')
                 ->group(function () {
                     require __DIR__.'/../routes/portal/instances.php';
+                    require __DIR__.'/../routes/portal/companies.php';
+                    require __DIR__.'/../routes/portal/agencies.php';
                 });
         }
     )

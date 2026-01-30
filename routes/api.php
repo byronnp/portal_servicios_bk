@@ -29,14 +29,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/users/{userId}/activate', [AuthController::class, 'activateUser']);
     Route::post('/users/{userId}/deactivate', [AuthController::class, 'deactivateUser']);
 
-    // Instance routes
-    Route::apiResource('instances', InstanceController::class);
-
     // Company routes
-    Route::apiResource('companies', CompanyController::class);
-    Route::get('/instances/{instanceId}/companies', [CompanyController::class, 'byInstance']);
+    //Route::apiResource('companies', CompanyController::class);
+    //Route::get('/instances/{instanceId}/companies', [CompanyController::class, 'byInstance']);
 
     // Agency routes
-    Route::apiResource('agencies', AgencyController::class);
-    Route::get('/companies/{companyId}/agencies', [AgencyController::class, 'byCompany']);
+    //Route::apiResource('agencies', AgencyController::class);
+    //Route::get('/companies/{companyId}/agencies', [AgencyController::class, 'byCompany']);
 });
