@@ -111,4 +111,91 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(UserProfile::class);
     }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+
+    /**
+     * Check if user has a specific role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()
+            ->where('slug', $role)
+            ->where('is_active', true)
+            ->exists();
+    }
+
+    /**
+     * Check if user has any of the given roles.
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return $this->roles()
+            ->whereIn('slug', $roles)
+            ->where('is_active', true)
+            ->exists();
+    }
+
+    /**
+     * Check if user has a specific permission.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->roles()
+            ->where('is_active', true)
+            ->whereHas('permissions', function ($query) use ($permission) {
+                $query->where('slug', $permission)
+                    ->where('is_active', true);
+            })
+            ->exists();
+    }
+
+    /**
+     * Check if user has any of the given permissions.
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        return $this->roles()
+            ->where('is_active', true)
+            ->whereHas('permissions', function ($query) use ($permissions) {
+                $query->whereIn('slug', $permissions)
+                    ->where('is_active', true);
+            })
+            ->exists();
+    }
+
+    /**
+     * The applications that belong to the user.
+     */
+    public function applications()
+    {
+        return $this->belongsToMany(Application::class, 'application_user')
+            ->withPivot('assigned_at', 'assigned_by', 'is_active')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get active applications for this user.
+     */
+    public function activeApplications()
+    {
+        return $this->applications()->wherePivot('is_active', true);
+    }
+
+    /**
+     * Check if user has access to a specific application.
+     */
+    public function hasApplicationAccess(int $applicationId): bool
+    {
+        return $this->applications()
+            ->where('applications.id', $applicationId)
+            ->wherePivot('is_active', true)
+            ->exists();
+    }
 }

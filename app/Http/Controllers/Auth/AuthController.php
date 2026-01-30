@@ -422,4 +422,271 @@ class AuthController extends Controller
                 ->respond();
         }
     }
+
+    /**
+     * Update authenticated user data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateUser(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'sometimes|required|string|max:255',
+                'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
+                'password' => 'sometimes|required|string|min:8|confirmed',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->responder
+                    ->error($validator->errors()->first(), 422)
+                    ->respond();
+            }
+
+            if ($request->has('name')) {
+                $user->name = $request->name;
+            }
+
+            if ($request->has('email')) {
+                $user->email = $request->email;
+            }
+
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->save();
+            $user->load('profile');
+
+            return $this->responder
+                ->success($user, [UserTransformer::class, 'transform'])
+                ->message('User updated successfully')
+                ->respond();
+
+        } catch (Exception $e) {
+            Log::error('Error updating user: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error updating user', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Update authenticated user profile.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $profile = $user->profile;
+
+            if (!$profile) {
+                return $this->responder
+                    ->error('User profile not found', 404)
+                    ->respond();
+            }
+
+            $validator = Validator::make($request->all(), [
+                'identification' => 'sometimes|required|string|max:255|unique:user_profiles,identification,' . $profile->id,
+                'first_name' => 'sometimes|required|string|max:255',
+                'last_name' => 'sometimes|required|string|max:255',
+                'user_name' => 'sometimes|required|string|max:255|unique:user_profiles,user_name,' . $profile->id,
+                'phone' => 'nullable|string|max:20',
+                'crm_id' => 'nullable|string|max:255|unique:user_profiles,crm_id,' . $profile->id,
+                'position' => 'nullable',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->responder
+                    ->error($validator->errors()->first(), 422)
+                    ->respond();
+            }
+
+            $profile->fill($request->only([
+                'identification',
+                'first_name',
+                'last_name',
+                'user_name',
+                'phone',
+                'crm_id',
+                'position'
+            ]));
+
+            $profile->save();
+            $user->load('profile');
+
+            return $this->responder
+                ->success($user, [UserTransformer::class, 'transform'])
+                ->message('Profile updated successfully')
+                ->respond();
+
+        } catch (Exception $e) {
+            Log::error('Error updating profile: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error updating profile', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Get user by ID with profile.
+     *
+     * @param  int  $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserById($userId)
+    {
+        try {
+            $user = User::with('profile')->find($userId);
+
+            if (!$user) {
+                return $this->responder
+                    ->error('User not found', 404)
+                    ->respond();
+            }
+
+            return $this->responder
+                ->success($user, [UserTransformer::class, 'transform'])
+                ->message('User retrieved successfully')
+                ->respond();
+
+        } catch (Exception $e) {
+            Log::error('Error retrieving user: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error retrieving user', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Update user data by ID (admin action).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateUserById(Request $request, $userId)
+    {
+        try {
+            $user = User::find($userId);
+
+            if (!$user) {
+                return $this->responder
+                    ->error('User not found', 404)
+                    ->respond();
+            }
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'sometimes|required|string|max:255',
+                'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
+                'password' => 'sometimes|required|string|min:8|confirmed',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->responder
+                    ->error($validator->errors()->first(), 422)
+                    ->respond();
+            }
+
+            if ($request->has('name')) {
+                $user->name = $request->name;
+            }
+
+            if ($request->has('email')) {
+                $user->email = $request->email;
+            }
+
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->save();
+            $user->load('profile');
+
+            return $this->responder
+                ->success($user, [UserTransformer::class, 'transform'])
+                ->message('User updated successfully')
+                ->respond();
+
+        } catch (Exception $e) {
+            Log::error('Error updating user by ID: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error updating user', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Update user profile by user ID (admin action).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfileById(Request $request, $userId)
+    {
+        try {
+            $user = User::with('profile')->find($userId);
+
+            if (!$user) {
+                return $this->responder
+                    ->error('User not found', 404)
+                    ->respond();
+            }
+
+            $profile = $user->profile;
+
+            if (!$profile) {
+                return $this->responder
+                    ->error('User profile not found', 404)
+                    ->respond();
+            }
+
+            $validator = Validator::make($request->all(), [
+                'identification' => 'sometimes|required|string|max:255|unique:user_profiles,identification,' . $profile->id,
+                'first_name' => 'sometimes|required|string|max:255',
+                'last_name' => 'sometimes|required|string|max:255',
+                'user_name' => 'sometimes|required|string|max:255|unique:user_profiles,user_name,' . $profile->id,
+                'phone' => 'nullable|string|max:20',
+                'crm_id' => 'nullable|string|max:255|unique:user_profiles,crm_id,' . $profile->id,
+                'position' => 'nullable',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->responder
+                    ->error($validator->errors()->first(), 422)
+                    ->respond();
+            }
+
+            $profile->fill($request->only([
+                'identification',
+                'first_name',
+                'last_name',
+                'user_name',
+                'phone',
+                'crm_id',
+                'position'
+            ]));
+
+            $profile->save();
+            $user->load('profile');
+
+            return $this->responder
+                ->success($user, [UserTransformer::class, 'transform'])
+                ->message('Profile updated successfully')
+                ->respond();
+
+        } catch (Exception $e) {
+            Log::error('Error updating profile by ID: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error updating profile', 500)
+                ->respond();
+        }
+    }
 }
