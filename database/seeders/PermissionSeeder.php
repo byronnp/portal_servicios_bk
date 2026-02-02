@@ -42,6 +42,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'Crear agencia', 'slug' => 'agencies.store', 'description' => 'Crear nueva agencia', 'module' => 'catalog'],
             ['name' => 'Actualizar agencia', 'slug' => 'agencies.update', 'description' => 'Actualizar agencia existente', 'module' => 'catalog'],
             ['name' => 'Eliminar agencia', 'slug' => 'agencies.destroy', 'description' => 'Eliminar agencia', 'module' => 'catalog'],
+
+            // Application permissions
+            ['name' => 'Listar aplicaciones', 'slug' => 'applications.index', 'description' => 'Ver listado de aplicaciones', 'module' => 'catalog'],
+            ['name' => 'Ver aplicación', 'slug' => 'applications.show', 'description' => 'Ver detalle de aplicación', 'module' => 'catalog'],
+            ['name' => 'Crear aplicación', 'slug' => 'applications.store', 'description' => 'Crear nueva aplicación', 'module' => 'catalog'],
+            ['name' => 'Actualizar aplicación', 'slug' => 'applications.update', 'description' => 'Actualizar aplicación existente', 'module' => 'catalog'],
+            ['name' => 'Eliminar aplicación', 'slug' => 'applications.destroy', 'description' => 'Eliminar aplicación', 'module' => 'catalog'],
         ];
 
         foreach ($permissions as $permission) {

@@ -34,6 +34,7 @@ class RoleSeeder extends Seeder
                 'instances.index', 'instances.show', 'instances.store', 'instances.update', 'instances.destroy',
                 'companies.index', 'companies.show', 'companies.store', 'companies.update', 'companies.destroy',
                 'agencies.index', 'agencies.show', 'agencies.store', 'agencies.update', 'agencies.destroy',
+                'applications.index', 'applications.show', 'applications.store', 'applications.update', 'applications.destroy',
             ])->get()
         );
 
@@ -48,6 +49,7 @@ class RoleSeeder extends Seeder
                 'instances.index', 'instances.show',
                 'companies.index', 'companies.show', 'companies.store', 'companies.update',
                 'agencies.index', 'agencies.show', 'agencies.store', 'agencies.update',
+                'applications.index', 'applications.show', 'applications.store', 'applications.update',
             ])->get()
         );
 
@@ -62,6 +64,7 @@ class RoleSeeder extends Seeder
                 'instances.index', 'instances.show',
                 'companies.index', 'companies.show',
                 'agencies.index', 'agencies.show',
+                'applications.index', 'applications.show',
             ])->get()
         );
     }
