@@ -21,6 +21,12 @@ class UserTransformer
         if ($user->relationLoaded('profile') && $user->profile) {
             $data['profile'] = UserProfileTransformer::transform($user->profile);
         }
+        if($user->relationLoaded('applications') && $user->applications){
+            $data['application'] = ApplicationTransformer::collection($user->applications);
+        }
+        if ($user->relationLoaded('roles') && $user->roles) {
+            $data['roles'] = RoleTransformer::collection($user->roles);
+        }
 
         return $data;
     }

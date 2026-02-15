@@ -17,6 +17,7 @@ class ApplicationSeeder extends Seeder
         // Crear aplicaciones
         $app1 = Application::create([
             'name' => 'Portal de Servicios',
+            'slug' => 'portal',
             'description' => 'Portal principal de gestión de servicios empresariales',
             'is_web' => true,
             'is_mobile' => false,
@@ -26,7 +27,8 @@ class ApplicationSeeder extends Seeder
         ]);
 
         $app2 = Application::create([
-            'name' => 'App Móvil Clientes',
+            'name' => 'Omotenashi',
+            'slug' => 'omotenashi',
             'description' => 'Aplicación móvil para clientes y seguimiento de servicios',
             'is_web' => false,
             'is_mobile' => true,
@@ -36,15 +38,16 @@ class ApplicationSeeder extends Seeder
         ]);
 
         $app3 = Application::create([
-            'name' => 'Dashboard Analytics',
-            'description' => 'Panel de análisis y reportes en tiempo real - Multi-plataforma',
+            'name' => 'Avaluos',
+            'slug' => 'avaluos',
+            'description' => 'Aplicación para registro de avaluos Avaluos',
             'is_web' => true,
             'is_mobile' => true,
             'start_url' => 'https://analytics.example.com',
             'icon' => '/icons/analytics.png',
             'is_active' => true,
         ]);
-
+/*
         // Obtener el usuario 1
         $user = User::find(1);
 
@@ -63,6 +66,6 @@ class ApplicationSeeder extends Seeder
             ]);
 
             // app3 NO se asigna al usuario 1
-        }
+        }*/
     }
 }

@@ -180,10 +180,23 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me($appId = null)
     {
         try {
-            $user = Auth::user()->load('profile');
+
+            $appId = $appId ?? 1;
+
+            $user = Auth::user()->load([
+                'profile',
+                'applications' => function ($query) use ($appId) {
+                    $query->where('application_id', $appId);
+                },
+                'roles' => function ($query) use ($appId) {
+                    $query->wherePivot('application_id', $appId)
+                        ->wherePivot('is_active', true)
+                        ->where('roles.is_active', true); // Calificamos la tabla para evitar el error 1052
+                }
+            ]);
             return $this->responder
                 ->success($user, [UserTransformer::class, 'transform'])
                 ->message('User retrieved successfully')

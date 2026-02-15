@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responders;
+namespace App\Models\Responders;
 
 use Illuminate\Http\JsonResponse;
 

@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('slug')->unique();
+            $table->foreignId('application_id')->after('id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('slug');
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
+
+            // Esto permite: (App 1, Admin) y (App 2, Admin)
+            $table->unique(['application_id', 'name']);
+            $table->unique(['application_id', 'slug']);
         });
     }
 

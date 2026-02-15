@@ -117,7 +117,18 @@ class User extends Authenticatable implements JWTSubject
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user');
+        return $this->belongsToMany(Role::class, 'application_user_role')
+            ->withPivot('application_id', 'is_active');
+    }
+
+    /**
+     * The application that belong to the user.
+     */
+    public function applications()
+    {
+        return $this->belongsToMany(Application::class, 'application_user_role')
+            ->withPivot('is_active')
+            ->distinct(); // <--- Esto evita los duplicados
     }
 
     /**
@@ -148,7 +159,8 @@ class User extends Authenticatable implements JWTSubject
     public function hasPermission(string $permission): bool
     {
         return $this->roles()
-            ->where('is_active', true)
+            ->where('application_user_role.is_active', 1) // <--- Especifica la tabla pivote
+            ->where('roles.is_active', 1)
             ->whereHas('permissions', function ($query) use ($permission) {
                 $query->where('slug', $permission)
                     ->where('is_active', true);
@@ -173,12 +185,12 @@ class User extends Authenticatable implements JWTSubject
     /**
      * The applications that belong to the user.
      */
-    public function applications()
+    /*public function applications()
     {
         return $this->belongsToMany(Application::class, 'application_user')
             ->withPivot('assigned_at', 'assigned_by', 'is_active')
             ->withTimestamps();
-    }
+    }*/
 
     /**
      * Get active applications for this user.

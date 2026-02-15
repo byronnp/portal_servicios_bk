@@ -6,7 +6,7 @@ Route::middleware(['auth.api'])
     ->controller(AuthController::class)
     ->group(function () {
         // Current user routes
-        Route::get('/me', 'me')->name('user.me');
+        Route::get('/me/{appId?}', 'me')->name('user.me');
         Route::patch('/user', 'updateUser')->name('user.update');
         Route::patch('/profile', 'updateProfile')->name('profile.update');
 

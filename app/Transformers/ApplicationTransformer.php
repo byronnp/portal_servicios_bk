@@ -25,4 +25,10 @@ class ApplicationTransformer
             'deleted_at' => $application->deleted_at?->toISOString(),
         ];
     }
+
+    // Agrega este método para procesar listas
+    public static function collection($applications): array
+    {
+        return $applications->map(fn($app) => self::transform($app))->toArray();
+    }
 }

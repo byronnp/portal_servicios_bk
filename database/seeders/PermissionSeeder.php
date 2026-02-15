@@ -49,6 +49,20 @@ class PermissionSeeder extends Seeder
             ['name' => 'Crear aplicación', 'slug' => 'applications.store', 'description' => 'Crear nueva aplicación', 'module' => 'catalog'],
             ['name' => 'Actualizar aplicación', 'slug' => 'applications.update', 'description' => 'Actualizar aplicación existente', 'module' => 'catalog'],
             ['name' => 'Eliminar aplicación', 'slug' => 'applications.destroy', 'description' => 'Eliminar aplicación', 'module' => 'catalog'],
+
+            //role  permissions
+            ['name' => 'Ver listado de roles', 'slug' => 'roles.index', 'description' => 'Ver listado de roles', 'module' => 'role'],
+            ['name' => 'Ver detalle de rol', 'slug' => 'roles.show', 'description' => 'Ver detalle de rol', 'module' => 'role'],
+            ['name' => 'Crear rol', 'slug' => 'roles.store', 'description' => 'Crear nuevo rol', 'module' => 'role'],
+            ['name' => 'Actualizar rol', 'slug' => 'roles.update', 'description' => 'Actualizar rol existente', 'module' => 'role'],
+            ['name' => 'Eliminar rol', 'slug' => 'roles.destroy', 'description' => 'Eliminar rol', 'module' => 'role'],
+
+            //role  permissions admin Omotenashi
+            ['name' => 'Ver listado de usuarios', 'slug' => 'omotenashi.index', 'description' => 'Ver listado de usuarios', 'module' => 'user'],
+            ['name' => 'Ver detalle de usuario', 'slug' => 'omotenashi.show', 'description' => 'Ver detalle de usuario', 'module' => 'user'],
+            ['name' => 'Crear usuario', 'slug' => 'omotenashi.store', 'description' => 'Crear nuevo usuario', 'module' => 'user'],
+            ['name' => 'Actualizar usuario', 'slug' => 'omotenashi.update', 'description' => 'Actualizar usuario existente', 'module' => 'user'],
+            ['name' => 'Eliminar usuario', 'slug' => 'omotenashi.destroy', 'description' => 'Eliminar usuario', 'module' => 'user'],
         ];
 
         foreach ($permissions as $permission) {

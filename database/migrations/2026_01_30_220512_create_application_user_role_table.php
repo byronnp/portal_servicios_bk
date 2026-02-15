@@ -11,16 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('application_user', function (Blueprint $table) {
+        Schema::create('application_user_role', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('application_id')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->timestamp('assigned_at')->nullable()->comment('Fecha de asignación');
             $table->foreignId('assigned_by')->nullable()->constrained('users')->onDelete('set null')->comment('Usuario que asignó');
             $table->boolean('is_active')->default(true)->comment('Estado de la asignación');
-            $table->timestamps();
 
-            $table->unique(['application_id', 'user_id']);
+
+            // Índices para velocidad de consulta
+            $table->index(['user_id', 'application_id']);
+
+            // Evita duplicados exactos (Opcional si permites el mismo rol dos veces)
+            $table->unique(['user_id', 'application_id', 'role_id'], 'user_app_role_unique');
+            $table->timestamps();
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Responders\ApiResponder;
+use App\Models\Responders\ApiResponder;
 
 abstract class Controller
 {

@@ -19,4 +19,9 @@ class RoleTransformer
             }),
         ];
     }
+
+    public static function collection($roles): array
+    {
+        return $roles->map(fn($role) => self::transform($role))->toArray();
+    }
 }

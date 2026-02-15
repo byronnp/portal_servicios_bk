@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model
+class ApplicationUserRole extends Model
 {
     use SoftDeletes, HasCreatedUpdatedBy;
 
     protected $fillable = [
-        'name',
-        'slug',
-        'description',
+        'user_id',
+        'application_id',
+        'role_id',
+        'assigned_at',
         'is_active',
     ];
 
@@ -22,30 +23,24 @@ class Role extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * The permissions that belong to the role.
-     */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class, 'permission_role');
     }
 
     /**
-     * The users that belong to the role.
+     * Relación con la Aplicación
      */
-    public function users(): BelongsToMany
+    public function application()
     {
-        return $this->belongsToMany(User::class, 'application_user_role');
+        return $this->belongsTo(Application::class);
     }
 
     /**
-     * Check if role has a specific permission.
+     * Relación con el Rol
      */
-    public function hasPermission(string $permission): bool
+    public function role()
     {
-        return $this->permissions()
-            ->where('slug', $permission)
-            ->where('is_active', true)
-            ->exists();
+        return $this->belongsTo(Role::class);
     }
 }
