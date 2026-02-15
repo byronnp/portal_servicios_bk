@@ -2,7 +2,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\InstanceController;
 
-
 Route::middleware(['auth.api'])
     ->controller(InstanceController::class)
     ->prefix('catalog/instances')
