@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('roles', function (Blueprint $table) {
-            $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
+        Schema::table('catalog_items', function (Blueprint $table) {
+            $table->text('icon')->nullable()->after('crm_code');
         });
-
     }
 
     /**
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('roles', function (Blueprint $table) {
-            $table->dropForeign(['application_id']);
+        Schema::table('catalog_items', function (Blueprint $table) {
+            $table->dropColumn('icon');
         });
     }
 };

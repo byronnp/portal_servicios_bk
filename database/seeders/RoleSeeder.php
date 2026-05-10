@@ -14,23 +14,28 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Super Admin role with all permissions
-        $superAdmin = Role::create([
-            'name' => 'Super Administrador',
-            'slug' => 'super-admin',
-            'description' => 'Acceso total al sistema',
-            'application_id' => 1,
-        ]);
-        $superAdmin->permissions()->attach(Permission::all());
+        $portalId = \App\Models\Application::where('slug', 'portal')->value('id');
+        $omotenashiId = \App\Models\Application::where('slug', 'omotenashi')->value('id');
 
-        // Create Admin role with most permissions
-        $admin = Role::create([
-            'name' => 'Administrador',
-            'slug' => 'admin',
-            'description' => 'Administrador del sistema',
-            'application_id' => 1,
+        $superAdmin = Role::updateOrCreate([
+            'application_id' => $portalId,
+            'slug' => 'super-admin',
+        ], [
+            'name' => 'Super Administrador',
+            'description' => 'Acceso total al sistema',
+            'is_active' => true,
         ]);
-        $admin->permissions()->attach(
+        $superAdmin->permissions()->sync(Permission::pluck('id'));
+
+        $admin = Role::updateOrCreate([
+            'application_id' => $portalId,
+            'slug' => 'admin',
+        ], [
+            'name' => 'Administrador',
+            'description' => 'Administrador del sistema',
+            'is_active' => true,
+        ]);
+        $admin->permissions()->sync(
             Permission::whereIn('slug', [
                 'auth.sessions.manage', 'auth.users.show', 'auth.users.update', 'auth.profile.update',
                 'instances.index', 'instances.show', 'instances.store', 'instances.update', 'instances.destroy',
@@ -38,55 +43,62 @@ class RoleSeeder extends Seeder
                 'agencies.index', 'agencies.show', 'agencies.store', 'agencies.update', 'agencies.destroy',
                 'applications.index', 'applications.show', 'applications.store', 'applications.update', 'applications.destroy',
                 'roles.index','roles.show', 'roles.store', 'roles.update', 'roles.destroy',
-            ])->get()
+                'catalog-types.index', 'catalog-types.store', 'catalog-types.update', 'catalog-types.destroy',
+                'catalog-items.index', 'catalog-items.store', 'catalog-items.update', 'catalog-items.destroy',
+                'menus.index', 'menus.store', 'menus.update', 'menus.destroy',
+                'application-users.index', 'application-users.store', 'application-users.update', 'application-users.destroy',
+                'permissions.index', 'permissions.store', 'permissions.update', 'permissions.destroy',
+            ])->pluck('id')
         );
 
-        // Create Manager role
-        $manager = Role::create([
-            'name' => 'Gerente',
+        $manager = Role::updateOrCreate([
+            'application_id' => $portalId,
             'slug' => 'manager',
+        ], [
+            'name' => 'Gerente',
             'description' => 'Gerente con permisos de lectura y escritura',
-            'application_id' => 1,
+            'is_active' => true,
         ]);
-        $manager->permissions()->attach(
+        $manager->permissions()->sync(
             Permission::whereIn('slug', [
                 'instances.index', 'instances.show',
                 'companies.index', 'companies.show', 'companies.store', 'companies.update',
                 'agencies.index', 'agencies.show', 'agencies.store', 'agencies.update',
                 'applications.index', 'applications.show', 'applications.store', 'applications.update',
-            ])->get()
+                'catalog-types.index', 'catalog-items.index', 'menus.index',
+            ])->pluck('id')
         );
 
-        // Create User role (read only)
-        $user = Role::create([
+        $user = Role::updateOrCreate([
+            'application_id' => $portalId,
+            'slug' => 'user',
+        ], [
             'name' => 'Usuario',
-            'slug' => 'user',
             'description' => 'Usuario con permisos de solo lectura',
-            'application_id' => 1,
+            'is_active' => true,
         ]);
-        $user->permissions()->attach(
+        $user->permissions()->sync(
             Permission::whereIn('slug', [
                 'instances.index', 'instances.show',
                 'companies.index', 'companies.show',
                 'agencies.index', 'agencies.show',
                 'applications.index', 'applications.show',
-            ])->get()
+                'catalog-types.index', 'catalog-items.index', 'menus.index',
+            ])->pluck('id')
         );
 
-        // Create User role (read only)
-        $user = Role::create([
-            'name' => 'Usuario omotenashi',
+        $omotenashiUser = Role::updateOrCreate([
+            'application_id' => $omotenashiId,
             'slug' => 'user',
+        ], [
+            'name' => 'Usuario omotenashi',
             'description' => 'Usuario con permisos de solo lectura',
-            'application_id' => 2,
+            'is_active' => true,
         ]);
-        $user->permissions()->attach(
+        $omotenashiUser->permissions()->sync(
             Permission::whereIn('slug', [
-                'instances.index', 'instances.show',
-                'companies.index', 'companies.show',
-                'agencies.index', 'agencies.show',
-                'applications.index', 'applications.show',
-            ])->get()
+                'omotenashi.index', 'omotenashi.show',
+            ])->pluck('id')
         );
     }
 }

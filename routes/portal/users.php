@@ -17,6 +17,8 @@ Route::middleware(['auth.api'])
 
         // User management routes
         Route::get('/users/{userId}', 'getUserById')->name('users.show')->middleware('permission:auth.users.show');
+        Route::get('/users/{userId}/roles/{appId?}', 'getUserRoles')->name('users.roles')->middleware('permission:auth.users.show');
+        Route::get('/users/{userId}/permissions/{appId?}', 'getUserPermissions')->name('users.permissions')->middleware('permission:auth.users.show');
         Route::patch('/users/{userId}', 'updateUserById')->name('users.update')->middleware('permission:auth.users.update');
         Route::patch('/users/{userId}/profile', 'updateProfileById')->name('users.profile.update')->middleware('permission:auth.profile.update');
         Route::post('/users/{userId}/activate', 'activateUser')->name('users.activate')->middleware('permission:auth.users.activate');

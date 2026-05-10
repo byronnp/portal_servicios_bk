@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\AuthLog;
 use App\Models\UserProfile;
+use App\Transformers\PermissionsTransformer;
+use App\Transformers\RoleTransformer;
 use App\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -192,9 +194,8 @@ class AuthController extends Controller
                     $query->where('application_id', $appId);
                 },
                 'roles' => function ($query) use ($appId) {
-                    $query->wherePivot('application_id', $appId)
-                        ->wherePivot('is_active', true)
-                        ->where('roles.is_active', true); // Calificamos la tabla para evitar el error 1052
+                    $query->where('roles.application_id', $appId)
+                        ->where('roles.is_active', true);
                 }
             ]);
             return $this->responder
@@ -573,6 +574,89 @@ class AuthController extends Controller
             Log::error('Error retrieving user: ' . $e->getMessage());
             return $this->responder
                 ->error('Error retrieving user', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Get roles assigned to a user.
+     *
+     * @param  int  $userId
+     * @param  int|null  $appId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserRoles($userId, $appId = null)
+    {
+        try {
+            $user = User::find($userId);
+
+            if (!$user) {
+                return $this->responder
+                    ->error('User not found', 404)
+                    ->respond();
+            }
+
+            $roles = $user->roles()
+                ->with('permissions')
+                ->when($appId, function ($query) use ($appId) {
+                    $query->where('roles.application_id', $appId);
+                })
+                ->where('roles.is_active', true)
+                ->get();
+
+            return $this->responder
+                ->success($roles, [RoleTransformer::class, 'transform'])
+                ->message('User roles retrieved successfully')
+                ->respond();
+        } catch (Exception $e) {
+            Log::error('Error retrieving user roles: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error retrieving user roles', 500)
+                ->respond();
+        }
+    }
+
+    /**
+     * Get effective permissions assigned to a user through roles.
+     *
+     * @param  int  $userId
+     * @param  int|null  $appId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserPermissions($userId, $appId = null)
+    {
+        try {
+            $user = User::find($userId);
+
+            if (!$user) {
+                return $this->responder
+                    ->error('User not found', 404)
+                    ->respond();
+            }
+
+            $roles = $user->roles()
+                ->with(['permissions' => function ($query) {
+                    $query->where('permissions.is_active', true);
+                }])
+                ->when($appId, function ($query) use ($appId) {
+                    $query->where('roles.application_id', $appId);
+                })
+                ->where('roles.is_active', true)
+                ->get();
+
+            $permissions = $roles
+                ->flatMap(fn ($role) => $role->permissions)
+                ->unique('slug')
+                ->values();
+
+            return $this->responder
+                ->success($permissions, [PermissionsTransformer::class, 'transform'])
+                ->message('User permissions retrieved successfully')
+                ->respond();
+        } catch (Exception $e) {
+            Log::error('Error retrieving user permissions: ' . $e->getMessage());
+            return $this->responder
+                ->error('Error retrieving user permissions', 500)
                 ->respond();
         }
     }

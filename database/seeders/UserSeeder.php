@@ -15,13 +15,13 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::create([
+        $user = User::updateOrCreate(['email' => 'bpilataxi@casabaca.com'], [
             'name' => 'BYRON VINICIO PILATAXI ALMACHI',
-            'email' => 'bpilataxi@casabaca.com',
             'password' => Hash::make('Vinicio1987#'),
+            'is_active' => true,
         ]);
 
-        UserProfile::create([
+        UserProfile::updateOrCreate(['user_id' => $user->id], [
             'user_id' => $user->id,
             'identification' => '1716128911',
             'first_name' => 'BYRON VINICIO',

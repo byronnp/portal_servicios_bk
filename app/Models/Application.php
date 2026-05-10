@@ -7,6 +7,7 @@ use App\Traits\HasCreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Application extends Model
@@ -63,6 +64,16 @@ class Application extends Model
         return $this->belongsToMany(User::class, 'application_user')
             ->withPivot('assigned_at', 'assigned_by', 'is_active')
             ->withTimestamps();
+    }
+
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
     }
 
     /**

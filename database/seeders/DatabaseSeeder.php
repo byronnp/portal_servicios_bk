@@ -17,13 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionSeeder::class,
+            ApplicationSeeder::class,
             RoleSeeder::class,
             InstanceSeeder::class,
             CompanySeeder::class,
             AgencySeeder::class,
             UserSeeder::class,
-            ApplicationSeeder::class,
-            AplicationUserRole::class
+            ApplicationUserSeeder::class,
+            RoleUserSeeder::class,
+            CatalogTypeSeeder::class,
+            CatalogItemSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }

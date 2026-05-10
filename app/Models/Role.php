@@ -12,6 +12,7 @@ class Role extends Model
     use SoftDeletes, HasCreatedUpdatedBy;
 
     protected $fillable = [
+        'application_id',
         'name',
         'slug',
         'description',
@@ -35,7 +36,7 @@ class Role extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'application_user_role');
+        return $this->belongsToMany(User::class, 'role_user');
     }
 
     /**
@@ -47,5 +48,10 @@ class Role extends Model
             ->where('slug', $permission)
             ->where('is_active', true)
             ->exists();
+    }
+
+    public function syncPermissions(array $permissions): void
+    {
+        $this->permissions()->sync($permissions);
     }
 }

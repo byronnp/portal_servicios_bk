@@ -16,21 +16,19 @@ class CompanySeeder extends Seeder
     {
         $instance = Instance::first();
 
-        Company::create([
+        Company::updateOrCreate(['ruc' => '1791856125001'], [
             'instance_id' => $instance->id,
             'crm_company_id' => 'CASABACA',
             's3s_id' => 'S3S_001',
-            'ruc' => '1791856125001',
             'name' => 'CASA BACA S.A.',
             'description' => 'Empresa principal Casa Baca',
             'status' => true,
         ]);
 
-        Company::create([
+        Company::updateOrCreate(['ruc' => '1791856125002'], [
             'instance_id' => $instance->id,
             'crm_company_id' => '1001 CARROS',
             's3s_id' => 'S3S_002',
-            'ruc' => '1791856125002',
             'name' => 'CASA BACA NORTE',
             'description' => 'Empresa Casa Baca Norte',
             'status' => true,

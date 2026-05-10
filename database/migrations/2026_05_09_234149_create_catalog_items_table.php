@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('catalog_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('application_id')->nullable();
+            $table->foreignId('catalog_type_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('slug');
             $table->text('description')->nullable();
+            $table->string('s3s_code')->nullable();
+            $table->string('crm_code')->nullable();
+            $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
-            // Esto permite: (App 1, Admin) y (App 2, Admin)
-            $table->unique(['application_id', 'name']);
-            $table->unique(['application_id', 'slug']);
+            $table->index(['catalog_type_id', 'is_active']);
+            $table->index(['catalog_type_id', 'sort_order']);
+            $table->index('s3s_code');
+            $table->index('crm_code');
         });
     }
 
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('catalog_items');
     }
 };

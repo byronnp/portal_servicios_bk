@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasCreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Permission extends Model
@@ -29,5 +30,10 @@ class Permission extends Model
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'permission_role');
+    }
+
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
     }
 }

@@ -14,10 +14,8 @@ class ApplicationSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear aplicaciones
-        $app1 = Application::create([
+        Application::updateOrCreate(['slug' => 'portal'], [
             'name' => 'Portal de Servicios',
-            'slug' => 'portal',
             'description' => 'Portal principal de gestión de servicios empresariales',
             'is_web' => true,
             'is_mobile' => false,
@@ -26,9 +24,8 @@ class ApplicationSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $app2 = Application::create([
+        Application::updateOrCreate(['slug' => 'omotenashi'], [
             'name' => 'Omotenashi',
-            'slug' => 'omotenashi',
             'description' => 'Aplicación móvil para clientes y seguimiento de servicios',
             'is_web' => false,
             'is_mobile' => true,
@@ -37,9 +34,8 @@ class ApplicationSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $app3 = Application::create([
+        Application::updateOrCreate(['slug' => 'avaluos'], [
             'name' => 'Avaluos',
-            'slug' => 'avaluos',
             'description' => 'Aplicación para registro de avaluos Avaluos',
             'is_web' => true,
             'is_mobile' => true,
@@ -47,25 +43,5 @@ class ApplicationSeeder extends Seeder
             'icon' => '/icons/analytics.png',
             'is_active' => true,
         ]);
-/*
-        // Obtener el usuario 1
-        $user = User::find(1);
-
-        if ($user) {
-            // Asignar 2 de las 3 aplicaciones al usuario 1
-            $user->applications()->attach($app1->id, [
-                'assigned_at' => now(),
-                'assigned_by' => 1, // Auto-asignado por el mismo usuario
-                'is_active' => true,
-            ]);
-
-            $user->applications()->attach($app2->id, [
-                'assigned_at' => now(),
-                'assigned_by' => 1,
-                'is_active' => true,
-            ]);
-
-            // app3 NO se asigna al usuario 1
-        }*/
     }
 }

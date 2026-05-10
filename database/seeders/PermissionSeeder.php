@@ -57,16 +57,47 @@ class PermissionSeeder extends Seeder
             ['name' => 'Actualizar rol', 'slug' => 'roles.update', 'description' => 'Actualizar rol existente', 'module' => 'role'],
             ['name' => 'Eliminar rol', 'slug' => 'roles.destroy', 'description' => 'Eliminar rol', 'module' => 'role'],
 
+            // Catalog permissions
+            ['name' => 'Listar tipos de catálogo', 'slug' => 'catalog-types.index', 'description' => 'Ver listado de tipos de catálogo', 'module' => 'catalog'],
+            ['name' => 'Crear tipo de catálogo', 'slug' => 'catalog-types.store', 'description' => 'Crear tipo de catálogo', 'module' => 'catalog'],
+            ['name' => 'Actualizar tipo de catálogo', 'slug' => 'catalog-types.update', 'description' => 'Actualizar tipo de catálogo', 'module' => 'catalog'],
+            ['name' => 'Eliminar tipo de catálogo', 'slug' => 'catalog-types.destroy', 'description' => 'Eliminar tipo de catálogo', 'module' => 'catalog'],
+            ['name' => 'Listar ítems de catálogo', 'slug' => 'catalog-items.index', 'description' => 'Ver listado de ítems de catálogo', 'module' => 'catalog'],
+            ['name' => 'Crear ítem de catálogo', 'slug' => 'catalog-items.store', 'description' => 'Crear ítem de catálogo', 'module' => 'catalog'],
+            ['name' => 'Actualizar ítem de catálogo', 'slug' => 'catalog-items.update', 'description' => 'Actualizar ítem de catálogo', 'module' => 'catalog'],
+            ['name' => 'Eliminar ítem de catálogo', 'slug' => 'catalog-items.destroy', 'description' => 'Eliminar ítem de catálogo', 'module' => 'catalog'],
+
+            // Menu permissions
+            ['name' => 'Listar menús', 'slug' => 'menus.index', 'description' => 'Ver estructura de menús', 'module' => 'menu'],
+            ['name' => 'Crear menú', 'slug' => 'menus.store', 'description' => 'Crear menú', 'module' => 'menu'],
+            ['name' => 'Actualizar menú', 'slug' => 'menus.update', 'description' => 'Actualizar menú', 'module' => 'menu'],
+            ['name' => 'Eliminar menú', 'slug' => 'menus.destroy', 'description' => 'Eliminar menú', 'module' => 'menu'],
+
+            // Application user assignment permissions
+            ['name' => 'Listar asignaciones usuario aplicación', 'slug' => 'application-users.index', 'description' => 'Ver asignaciones de aplicaciones a usuarios', 'module' => 'application-user'],
+            ['name' => 'Crear asignación usuario aplicación', 'slug' => 'application-users.store', 'description' => 'Asignar aplicación a usuario', 'module' => 'application-user'],
+            ['name' => 'Actualizar asignación usuario aplicación', 'slug' => 'application-users.update', 'description' => 'Actualizar asignación de aplicación a usuario', 'module' => 'application-user'],
+            ['name' => 'Eliminar asignación usuario aplicación', 'slug' => 'application-users.destroy', 'description' => 'Eliminar asignación de aplicación a usuario', 'module' => 'application-user'],
+
+            // Permission management permissions
+            ['name' => 'Listar permisos', 'slug' => 'permissions.index', 'description' => 'Ver listado de permisos', 'module' => 'permission'],
+            ['name' => 'Crear permiso', 'slug' => 'permissions.store', 'description' => 'Crear permiso', 'module' => 'permission'],
+            ['name' => 'Actualizar permiso', 'slug' => 'permissions.update', 'description' => 'Actualizar permiso', 'module' => 'permission'],
+            ['name' => 'Eliminar permiso', 'slug' => 'permissions.destroy', 'description' => 'Eliminar permiso', 'module' => 'permission'],
+
             //role  permissions admin Omotenashi
-            ['name' => 'Ver listado de usuarios', 'slug' => 'omotenashi.index', 'description' => 'Ver listado de usuarios', 'module' => 'user'],
-            ['name' => 'Ver detalle de usuario', 'slug' => 'omotenashi.show', 'description' => 'Ver detalle de usuario', 'module' => 'user'],
-            ['name' => 'Crear usuario', 'slug' => 'omotenashi.store', 'description' => 'Crear nuevo usuario', 'module' => 'user'],
-            ['name' => 'Actualizar usuario', 'slug' => 'omotenashi.update', 'description' => 'Actualizar usuario existente', 'module' => 'user'],
-            ['name' => 'Eliminar usuario', 'slug' => 'omotenashi.destroy', 'description' => 'Eliminar usuario', 'module' => 'user'],
+            ['name' => 'Listar usuarios Omotenashi', 'slug' => 'omotenashi.index', 'description' => 'Ver listado de usuarios', 'module' => 'user'],
+            ['name' => 'Ver usuario Omotenashi', 'slug' => 'omotenashi.show', 'description' => 'Ver detalle de usuario', 'module' => 'user'],
+            ['name' => 'Crear usuario Omotenashi', 'slug' => 'omotenashi.store', 'description' => 'Crear nuevo usuario', 'module' => 'user'],
+            ['name' => 'Actualizar usuario Omotenashi', 'slug' => 'omotenashi.update', 'description' => 'Actualizar usuario existente', 'module' => 'user'],
+            ['name' => 'Eliminar usuario Omotenashi', 'slug' => 'omotenashi.destroy', 'description' => 'Eliminar usuario', 'module' => 'user'],
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create($permission);
+            Permission::updateOrCreate(
+                ['slug' => $permission['slug']],
+                $permission
+            );
         }
     }
 }

@@ -117,8 +117,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'application_user_role')
-            ->withPivot('application_id', 'is_active');
+        return $this->belongsToMany(Role::class, 'role_user');
     }
 
     /**
@@ -126,8 +125,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function applications()
     {
-        return $this->belongsToMany(Application::class, 'application_user_role')
-            ->withPivot('is_active')
+        return $this->belongsToMany(Application::class, 'application_user')
+            ->withPivot('assigned_at', 'assigned_by', 'is_active')
+            ->withTimestamps()
             ->distinct(); // <--- Esto evita los duplicados
     }
 
@@ -138,7 +138,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->roles()
             ->where('slug', $role)
-            ->where('is_active', true)
+            ->where('roles.is_active', true)
             ->exists();
     }
 
@@ -149,7 +149,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->roles()
             ->whereIn('slug', $roles)
-            ->where('is_active', true)
+            ->where('roles.is_active', true)
             ->exists();
     }
 
@@ -159,7 +159,6 @@ class User extends Authenticatable implements JWTSubject
     public function hasPermission(string $permission): bool
     {
         return $this->roles()
-            ->where('application_user_role.is_active', 1) // <--- Especifica la tabla pivote
             ->where('roles.is_active', 1)
             ->whereHas('permissions', function ($query) use ($permission) {
                 $query->where('slug', $permission)
@@ -174,7 +173,7 @@ class User extends Authenticatable implements JWTSubject
     public function hasAnyPermission(array $permissions): bool
     {
         return $this->roles()
-            ->where('is_active', true)
+            ->where('roles.is_active', true)
             ->whereHas('permissions', function ($query) use ($permissions) {
                 $query->whereIn('slug', $permissions)
                     ->where('is_active', true);

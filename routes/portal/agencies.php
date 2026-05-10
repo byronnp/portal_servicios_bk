@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\AgencyController;
 
 Route::middleware(['auth.api'])
     ->controller(AgencyController::class)
-    ->prefix('catalog')
+    ->prefix('/')
     ->name('agencies.')
     ->group(function () {
         Route::get('/agencies','index')->name('index')->middleware('permission:agencies.index');

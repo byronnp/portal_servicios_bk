@@ -18,27 +18,24 @@ class AgencySeeder extends Seeder
         $company2 = Company::where('ruc', '1791856125002')->first();
 
         // Agencias para CASA BACA S.A.
-        Agency::create([
+        Agency::updateOrCreate(['crm_agency_id' => 'CRM_AG_001'], [
             'company_id' => $company1->id,
-            'crm_agency_id' => 'CRM_AG_001',
             'name' => 'Agencia Quito Centro',
             'description' => 'Agencia principal en Quito Centro',
             's3s_id' => 'S3S_AG_001',
             'status' => true,
         ]);
 
-        Agency::create([
+        Agency::updateOrCreate(['crm_agency_id' => 'CRM_AG_002'], [
             'company_id' => $company1->id,
-            'crm_agency_id' => 'CRM_AG_002',
             'name' => 'Agencia Quito Sur',
             'description' => 'Agencia en el sur de Quito',
             's3s_id' => 'S3S_AG_002',
             'status' => true,
         ]);
 
-        Agency::create([
+        Agency::updateOrCreate(['crm_agency_id' => 'CRM_AG_003'], [
             'company_id' => $company1->id,
-            'crm_agency_id' => 'CRM_AG_003',
             'name' => 'Agencia Guayaquil',
             'description' => 'Agencia en Guayaquil',
             's3s_id' => 'S3S_AG_003',
@@ -46,18 +43,16 @@ class AgencySeeder extends Seeder
         ]);
 
         // Agencias para CASA BACA NORTE
-        Agency::create([
+        Agency::updateOrCreate(['crm_agency_id' => 'CRM_AG_004'], [
             'company_id' => $company2->id,
-            'crm_agency_id' => 'CRM_AG_004',
             'name' => 'Agencia Quito Norte',
             'description' => 'Agencia en el norte de Quito',
             's3s_id' => 'S3S_AG_004',
             'status' => true,
         ]);
 
-        Agency::create([
+        Agency::updateOrCreate(['crm_agency_id' => 'CRM_AG_005'], [
             'company_id' => $company2->id,
-            'crm_agency_id' => 'CRM_AG_005',
             'name' => 'Agencia Cumbayá',
             'description' => 'Agencia en Cumbayá',
             's3s_id' => 'S3S_AG_005',

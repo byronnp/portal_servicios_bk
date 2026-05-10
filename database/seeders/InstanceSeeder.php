@@ -13,10 +13,9 @@ class InstanceSeeder extends Seeder
      */
     public function run(): void
     {
-        Instance::create([
+        Instance::updateOrCreate(['url' => 'www.google.com'], [
             'name' => 'CRM_CASABACA',
             'description' => 'INSTANCIA DE CASABACA',
-            'url' => 'www.google.com',
             'crm_token' => '91|bbbbbbbbbbbbbbbbbbb',
             'can_send_to_crm' => true,
             'status' => true,

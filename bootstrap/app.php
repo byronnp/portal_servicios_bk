@@ -22,6 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
                     require __DIR__.'/../routes/portal/agencies.php';
                     require __DIR__.'/../routes/portal/applications.php';
                     require __DIR__.'/../routes/portal/role.php';
+                    require __DIR__.'/../routes/portal/catalog_types.php';
+                    require __DIR__.'/../routes/portal/catalog_items.php';
+                    require __DIR__.'/../routes/portal/menus.php';
+                    require __DIR__.'/../routes/portal/application_users.php';
+                    require __DIR__.'/../routes/portal/permissions.php';
                 });
         }
     )
